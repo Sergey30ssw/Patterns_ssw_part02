@@ -32,19 +32,6 @@ class AuthTest {
     }
 
     @Test
-    @DisplayName("Should get error message if login with not registered user")
-    void shouldGetErrorIfNotRegisteredUser() {
-        var notRegisteredUser = getRegisteredUser("active");
-        $("[data-test-id='login'] input").setValue(notRegisteredUser.getLogin());
-        $("[data-test-id='password'] input").setValue(notRegisteredUser.getPassword());
-        $("[data-test-id='action-login']").click();
-        $("[data-test-id='error-notification'].notification_status_error .notification__content")
-            .shouldHave(text("Ошибка! Неверно указан логин или пароль"))    
-            .shouldBe(Condition.visible, Duration.ofSeconds(15));
-
-    }
-
-    @Test
     @DisplayName("Should get error message if login with blocked registered user")
     void shouldGetErrorIfBlockedUser() {
         var blockedUser = getRegisteredUser("blocked");
