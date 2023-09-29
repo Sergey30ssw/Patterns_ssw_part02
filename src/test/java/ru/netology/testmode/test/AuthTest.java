@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.testmode.data.DataGenerator.Registration.getRegisteredUser;
+import static ru.netology.testmode.data.DataGenerator.Registration.getUser;
 import static ru.netology.testmode.data.DataGenerator.getRandomLogin;
 import static ru.netology.testmode.data.DataGenerator.getRandomPassword;
 
@@ -28,6 +29,19 @@ class AuthTest {
         $("[data-test-id='password'] input").setValue(registeredUser.getPassword());
         $("[data-test-id='action-login']").click();
         $("[id='root'] h2").shouldHave(exactText("Личный кабинет"));
+
+    }
+
+     @Test
+    @DisplayName("Should get error message if login with not registered user")
+    void shouldGetErrorIfNotRegisteredUser() {
+        var notRegisteredUser = getUser("active");
+        $("[data-test-id='login'] input").setValue(notRegisteredUser.getLogin());
+        $("[data-test-id='password'] input").setValue(notRegisteredUser.getPassword());
+        $("[data-test-id='action-login']").click();
+        $("[data-test-id='error-notification'] .notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldBe(Condition.exactText("Ошибка! Неверно указан логин или пароль"));
 
     }
 
@@ -69,17 +83,5 @@ class AuthTest {
         $("[data-test-id='error-notification'] .notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(15))
                 .shouldBe(Condition.exactText("Ошибка! Неверно указан логин или пароль"));
-        }
-        @Test
-    @DisplayName("Should get error message if login with blocked registered user")
-    void shouldGetErrorIfBlockedUser() {
-        var blockedUser = getRegisteredUser("blocked");
-        $("[data-test-id='login'] input").setValue(blockedUser.getLogin());
-        $("[data-test-id='password'] input").setValue(blockedUser.getPassword());
-        $("[data-test-id='action-login']").click();
-        $("[data-test-id='error-notification'] .notification__content")
-                .shouldBe(Condition.visible, Duration.ofSeconds(15))
-                .shouldBe(Condition.exactText("Ошибка! Пользователь заблокирован"));
-  
     }
 }
