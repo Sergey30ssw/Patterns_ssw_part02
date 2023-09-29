@@ -32,7 +32,7 @@ class AuthTest {
 
     }
 
-     @Test
+    @Test
     @DisplayName("Should get error message if login with not registered user")
     void shouldGetErrorIfNotRegisteredUser() {
         var notRegisteredUser = getUser("active");
