@@ -69,5 +69,17 @@ class AuthTest {
         $("[data-test-id='error-notification'] .notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(15))
                 .shouldBe(Condition.exactText("Ошибка! Неверно указан логин или пароль"));
+        }
+        @Test
+    @DisplayName("Should get error message if login with blocked registered user")
+    void shouldGetErrorIfBlockedUser() {
+        var blockedUser = getRegisteredUser("blocked");
+        $("[data-test-id='login'] input").setValue(blockedUser.getLogin());
+        $("[data-test-id='password'] input").setValue(blockedUser.getPassword());
+        $("[data-test-id='action-login']").click();
+        $("[data-test-id='error-notification'] .notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldBe(Condition.exactText("Ошибка! Пользователь заблокирован"));
+  
     }
 }
